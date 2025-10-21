@@ -2,4 +2,7 @@ models/*.pth
 build
 dist
 hanabi_lib.egg-info
-
+.DS_Store
+.idea/
+webapp/__pycache__/
+hanabi_lib.cpython-311-darwin.so
