@@ -10,6 +10,8 @@ from setuptools import setup
 from torch.utils.cpp_extension import BuildExtension, CppExtension
 import sys
 import os
+import pybind11
+import torch
 
 OPTIONAL_SRC = []
 if int(os.environ.get("INSTALL_TORCHBOT", 0)):
@@ -17,7 +19,7 @@ if int(os.environ.get("INSTALL_TORCHBOT", 0)):
 
 boost_libs = ["boost_fiber", "boost_thread", "boost_context"]
 if sys.platform == "darwin":
-    boost_libs = [lib + '-mt' for lib in boost_libs]
+    boost_libs = [lib for lib in boost_libs]
 
 setup(
     name='hanabi_lib',
@@ -32,10 +34,12 @@ setup(
             "csrc/HanabiServer.cc",
             "csrc/BotUtils.cc",
         ] + OPTIONAL_SRC,
-        extra_compile_args=['-fPIC', '-std=c++1y', '-Wno-deprecated', '-O3', '-Wno-sign-compare', '-D_GLIBCXX_USE_CXX11_ABI=0', '-DCARD_ID=1'],
+        extra_compile_args=['-fPIC', '-std=c++17', '-O3','-Wno-deprecated', '-Wno-sign-compare', '-Wno-unused-variable', '-Wno-unused-but-set-variable'],
         libraries = ['z'] + boost_libs,
         library_dirs=['/usr/local/lib'],
-        include_dirs=['csrc'],
+        include_dirs=['csrc', pybind11.get_include(),
+            torch.utils.cpp_extension.include_paths(),
+            os.path.join(os.getenv('HOME'), '.Humanet_venv', 'include')],
         undef_macros=['NDEBUG'])
     ],
     cmdclass={"build_ext": BuildExtension},

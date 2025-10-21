@@ -120,7 +120,7 @@ function BoardState({ children, disconnected: Disconnected }) {
   const tryConnect = () => {
     try {
       websocket.current = new WebSocket(
-        "ws://" + window.location.hostname + ":5000/connect"
+        "ws://" + window.location.hostname + ":5050/connect"
       );
     } catch {
       dispatch({

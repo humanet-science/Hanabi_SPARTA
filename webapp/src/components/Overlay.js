@@ -14,7 +14,7 @@ function Overlay() {
   } = React.useContext(BoardContext);
 
   const [seed, setSeed] = React.useState(null);
-
+  const safeOtherBots = otherBots || [];
   return (
     <div
       style={{
@@ -36,13 +36,13 @@ function Overlay() {
       <button
         onClick={() => actions.playAgain(seed, botName)}
         className="connect"
-        style={{ fontSize: otherBots.length === 0 ? null : 14, margin: "10px" }}
+        style={{ fontSize: safeOtherBots.length === 0 ? null : 14, margin: "10px" }}
       >
         {/* Play Again with {botName} */}
         Play Again
       </button>
       <div>
-        {otherBots.map(otherName => (
+        {safeOtherBots.map(otherName => (
           <button
             key={otherName}
             onClick={() => actions.playAgain(seed, otherName)}

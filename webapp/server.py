@@ -8,7 +8,7 @@
 
 import torch  # make sure to dynamically load everything before loading hanabi_lib
 import asyncio
-from quart import Quart, websocket, Response
+from quart import Quart, websocket
 import json
 import sys
 import os
@@ -80,9 +80,24 @@ def formatMove(move, for_player_id, my_player_id):
     else:
         return str(move)
 
+# Serve React static files
+@app.route('/<path:path>')
+async def static_proxy(path):
+    file_path = os.path.join(BUILD_DIR, path)
+    if os.path.exists(file_path):
+        return await send_from_directory(BUILD_DIR, path)
+    else:
+        return await send_from_directory(BUILD_DIR, 'index.html')
+
+
+# Serve index.html for root
 @app.route('/')
-def index():
-    return '<code>Websocket endpoint is at /connect</code>'
+async def index():
+    return await send_from_directory(BUILD_DIR, 'index.html')
+
+# @app.route('/')
+# def index():
+#     return '<code>Websocket endpoint is at /connect</code>'
 
 @app.websocket('/connect')
 async def ws():
@@ -207,4 +222,4 @@ async def ws():
             bot.wait()
 
 
-app.run(host="0.0.0.0", port=5000)
+app.run(host="0.0.0.0", port=5050)
