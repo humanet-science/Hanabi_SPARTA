@@ -27,7 +27,11 @@ To reference this work, please use:
 ## Requirements
 * Python3
 * PyTorch 1.2+
+* pybind11
 * Boost 1.69+
+* Node
+* Yarn
+* quart
 
 **For SAD blueprint only**
 * libtorch, CUDA
